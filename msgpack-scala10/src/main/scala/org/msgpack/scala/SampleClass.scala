@@ -5,6 +5,5 @@ package org.msgpack.scala
  * User: takeshita
  * Create: 13/02/01 21:01
  */
-case class SampleClass(id : Long, name : String) {
-
+case class SampleClass(id : Long, name : String,gender : Int) {
 }

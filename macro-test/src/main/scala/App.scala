@@ -20,7 +20,10 @@ object App {
     implicit val packer = new Packer(bao)
     //MacroDef.serialize(User(2,"hoge"))
 
-    MacroDef.serializeSampleClass(SampleClass(20,"hoge"))
+    //MacroDef.serializeSampleClass(SampleClass(20,"hoge"))
+
+    val c = SampleClass(30,"ffff")
+    MacroDef.serialize(c)
 
     val data = bao.toByteArray()
     printf("Data length = %d",data.length)

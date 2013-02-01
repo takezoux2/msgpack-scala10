@@ -39,9 +39,9 @@ object MacroDef {
 
   }
 
-  def serialize[T](obj:T)(implicit s : Output) : Unit = macro _serialize[T]
+  def serialize[T](obj:T)(implicit s : Packer) : Unit = macro _serialize[T]
 
-  def _serialize[T](c:Context)( obj : c.Expr[T])(s : c.Expr[Output]) : c.Expr[Unit] = {
+  def _serialize[T](c:Context)( obj : c.Expr[T])(s : c.Expr[Packer]) : c.Expr[Unit] = {
 
     import c.universe._
     println("Start compile")
@@ -52,16 +52,27 @@ object MacroDef {
 
 
     val trees = vals.map(v => {
-
-      Apply(Select(reify(Predef).tree, newTermName("printf")),
-        List(
-          Literal(Constant(v.getter.name.encoded + " = %s\n")),
-          Select(obj.tree, v.getter.name)
-        )
-      )
+      v match{
+        case term : TermSymbol => {
+          term.getter.asMethod.returnType match{
+            case t if t =:= typeOf[String] => {
+              Apply(Select(s.tree,newTermName("writeString")), List(Select(obj.tree,term.getter.name)))
+            }
+            case definitions.IntTpe => {
+              Apply(Select(s.tree,newTermName("writeInt")), List(Select(obj.tree,term.getter.name)))
+            }
+            case definitions.LongTpe => {
+              Apply(Select(s.tree,newTermName("writeLong")), List(Select(obj.tree,term.getter.name)))
+            }
+          }
+        }
+      }
     }).toList
 
-    c.Expr[Unit](Block(trees :_*))
+    println( showRaw(trees))
+    c.Expr[Unit](Block(trees.reverse :_*))
   }
+
+
 
 }
