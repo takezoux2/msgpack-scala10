@@ -1,0 +1,8 @@
+target
+
+#sbt
+project/target
+
+#idea
+.idea
+.idea_modules
