@@ -8,3 +8,9 @@ package org.msgpack.scala
 trait ScalaMessagePack {
 
 }
+
+object ScalaMessagePack{
+
+
+
+}

@@ -9,9 +9,18 @@ object build extends Build{
     scalaVersion := "2.10.0"
   )
 
+  def runMacroTest = Command.command("run")( state => {
+    val subState = Command.process("project msgpack-scala-macro-test",state)
+    Command.process("run",subState)
+    state
+  })
+
   lazy val root = Project(
     "root",
-    file(".")
+    file("."),
+    settings = buildSettings ++ Seq(
+      commands ++= Seq(runMacroTest)
+    )
   ) aggregate(msgpackScala10)
 
   lazy val msgpackScala10 = Project(
