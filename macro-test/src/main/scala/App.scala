@@ -22,7 +22,7 @@ object App {
 
     //MacroDef.serializeSampleClass(SampleClass(20,"hoge"))
 
-    val c = SampleClass(30,"ffff")
+    val c = SampleClass(30,"ffff",4)
     MacroDef.serialize(c)
 
     val data = bao.toByteArray()
@@ -30,8 +30,11 @@ object App {
 
     implicit val unpacker = new Unpacker(new ByteArrayInputStream(data))
 
-    val des = MacroDef.deserializeSampleClass()
+    //val des = MacroDef.deserializeSampleClass()
 
+    val des = MacroDef.deserialize[SampleClass]()
+
+    println("----")
     println(des)
   }
 
